@@ -1,4 +1,6 @@
 import os
+import re
+from copy import copy
 from typing import ClassVar
 
 from openai import Embedding
@@ -23,6 +25,24 @@ def _setup_vector_store() -> vecs.Collection:
 
 class EmbeddingManager:
     _collection: ClassVar[vecs.Collection] = _setup_vector_store()
+
+    @staticmethod
+    def _preprocess_description(desc: str) -> str:
+        """ Preprocess job description before generating embeddings. """
+        _desc = copy(desc)
+        _desc = _desc.lower()
+
+        # remove all 'click to apply' links
+        pattern = r'\[click to apply\]\((.*?)\)'
+        _desc = re.sub(pattern, '', _desc)
+
+        # remove unnecessary lines
+        lines = desc.split('\n')
+        keywords = ["**posted on**", "**hourly range**", "**country**", "**location requirement**"]
+        filtered_lines = [line for line in lines if not any(keyword in line for keyword in keywords)]
+        _desc = '\n'.join(filtered_lines)
+
+        return _desc
 
     @classmethod
     def generate_embeddings(cls, data: list[dict]):
@@ -55,9 +75,10 @@ class EmbeddingManager:
 
     @staticmethod
     def _embed(text: str) -> list[float]:
+        _text = EmbeddingManager._preprocess_description(text)
         response = Embedding.create(
             model="text-embedding-ada-002",
-            input=[text]
+            input=[_text]
         )
         return response["data"][0]["embedding"]
 

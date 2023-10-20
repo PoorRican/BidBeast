@@ -104,11 +104,6 @@ class EvaluationFunctor:
     manager: ClassVar[EmbeddingManager] = EmbeddingManager()
 
     @staticmethod
-    def _preprocess_description(text: str) -> str:
-        """ Preprocess job description before generating embeddings. """
-        raise NotImplementedError
-
-    @staticmethod
     def _fetch_related_rows(related_ids: list[str]):
         rows = SUPABASE.table('potential_jobs') \
             .select('summary, title, pros, cons, viability, reviewed') \
@@ -126,7 +121,6 @@ class EvaluationFunctor:
 
     @classmethod
     async def __call__(cls, desc: str) -> FeedbackModel:
-        # TODO: preprocess desc before query
         related = cls.manager.query(desc)
         examples = cls._fetch_related_rows(related)
 
