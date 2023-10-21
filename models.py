@@ -1,8 +1,9 @@
 from enum import IntEnum
-from typing import Union, List, Optional, Iterator
+from typing import Union, List, Optional, Iterator, ClassVar
 from uuid import UUID, uuid4
 
 from langchain.pydantic_v1 import BaseModel, Field
+from postgrest import SyncRequestBuilder
 from postgrest.types import CountMethod
 
 from db import SUPABASE
@@ -47,6 +48,7 @@ class Job(object):
     link: str
     summary: str = ''
     feedback: Union[FeedbackModel, None] = None
+    table: ClassVar[SyncRequestBuilder] = SUPABASE.table('potential_jobs')
 
     def __init__(self, title: str, description: str, link: str):
         self.id = uuid4()
