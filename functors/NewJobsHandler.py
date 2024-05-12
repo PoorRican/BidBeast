@@ -71,17 +71,18 @@ class NewJobsHandler(object):
         """
         if jobs:
             print(f"Found {len(jobs)} new jobs")
-            coroutines = [
-                cls._summarizer(jobs),
-                cls._evaluate(jobs),
-            ]
-            # TODO: notify of valid jobs
+            # coroutines = [
+            #     cls._summarizer(jobs),
+            #     cls._evaluate(jobs),
+            # ]
+            # # TODO: notify of valid jobs
 
-            await asyncio.gather(*coroutines)
+            # await asyncio.gather(*coroutines)
 
-            await cls._manager(jobs)  # generate embeddings after evaluating
+            # await cls._manager(jobs)  # generate embeddings after evaluating
 
             cls._store_job(jobs)
-            return cls._filter_jobs(jobs)
+            # return cls._filter_jobs(jobs)
+            return jobs
         else:
             print("No new jobs...")
