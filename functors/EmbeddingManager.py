@@ -14,7 +14,7 @@ QUERY_MAX: int = 7
 
 def _setup_vector_store() -> vecs.Collection:
     _host = os.environ.get('RAW_SUPABASE_URL')
-    _user = 'postgres'
+    _user = os.environ.get('RAW_SUPABASE_USER')
     _password = os.environ.get('PG_PASS')
     _port = 5432
     _db_name = 'postgres'
