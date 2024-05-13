@@ -1,11 +1,12 @@
 from html import unescape
+import re
 
 from markdownify import markdownify
 from postgrest.types import CountMethod
 
 from db import SUPABASE
 from helpers import retry_on_error
-from models import Job
+from models import Job, HourlyRange
 
 
 def _extract_job(entry: dict) -> Job:
@@ -47,7 +48,6 @@ def _store_job(jobs: list[Job]):
     formatted = []
     for i in jobs:
         row = {
-            'id': str(i.id),
             'title': i.title,
             'desc': i.description,
             'link': i.link,
@@ -69,7 +69,24 @@ def _handle_new_jobs(jobs: list[Job]) -> list[Job]:
         print("No new jobs...")
 
 
+def _parse_hourly_range(job: Job) -> Job:
+    """ Parse hourly rate from job description """
+    if 'hourly rate' in job.description.lower():
+        pattern = r"\$(\d+\.\d+)"
+        matches = re.findall(pattern, job.description)
+
+        # Convert the matches to float
+        matches = [float(match) for match in matches]
+        if len(matches) == 2:
+            job.hourly_range = HourlyRange(start=matches[0], end=matches[1])
+    return job
+
+
 def extract_and_handle_jobs(entries: list[dict]) -> list[Job]:
     """ Extract and handle new jobs from the raw RSS feed """
     jobs = _extract_jobs(entries)
+
+    # Parse hourly rate
+    jobs = [_parse_hourly_range(i) for i in jobs]
+
     return _handle_new_jobs(jobs)

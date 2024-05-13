@@ -2,6 +2,10 @@
 
 ## v0.1.1
 
+### Feature Improvements
+
+- Extract hourly range from job description and print it in the message
+
 ### Code Changes
 
 - Remove code for automatic evaluation and filtering of jobs:
