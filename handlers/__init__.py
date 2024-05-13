@@ -1,1 +1,1 @@
-from SearchManager import SearchManager
+from .SearchManager import SearchManager
