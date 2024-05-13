@@ -1,18 +1,15 @@
 from typing import Union, Optional
 
-import discord
 from discord.ext.commands.bot import Bot
 from discord.ext import commands
 
 from cogs.BaseAuthenticatedCog import BaseAuthenticatedCog
 from cogs.JobFeedCog import JobFeedCog
-from cogs.ReviewCog import ReviewCog
 
 
 class MainCog(BaseAuthenticatedCog):
     bot: Bot
     job_feed: Union[JobFeedCog, None] = None
-    review: Union[ReviewCog, None] = None
 
     def __init__(self, bot: Bot):
         super().__init__(None)
@@ -32,10 +29,6 @@ class MainCog(BaseAuthenticatedCog):
         # setup job feed
         self.job_feed = JobFeedCog(self.user)
         await self.bot.add_cog(self.job_feed)
-
-        # setup review
-        self.review = ReviewCog(self.user)
-        await self.bot.add_cog(self.review)
 
     # Feed commands
 
@@ -84,14 +77,6 @@ class MainCog(BaseAuthenticatedCog):
                   help='return status of background loop')
     async def feed_status(self, ctx):
         await self.job_feed.status(ctx)
-
-    @feed.command('recent',
-                  aliases=['r'],
-                  help='fetch and list recent jobs from db (in hours)')
-    async def load_recent(self, ctx: commands.Context, hours: Optional[int] = 12):
-        await ctx.send(f"Loading viable jobs from the last {hours} hours")
-        self.job_feed.load_recent(hours)
-        await self.job_feed.list_cache()
 
     @feed.command('list',
                   aliases=['l'],

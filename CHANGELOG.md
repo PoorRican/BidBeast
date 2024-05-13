@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## v0.1.1
+
+### Feature Improvements
+
+- Extract hourly range from job description and print it in the message
+
+### Code Changes
+
+- Remove code for automatic evaluation and filtering of jobs:
+  * Remove `ReviewCog`, `StoreJobFunctor`, and unused functors
+  * Remove `utils` module, old notebooks, and `helpers` module
+- Implement Pydantic for `Job`
+- Convert `FeedParser` and `NewJobsHandler` into dedicated function
+
+---
+
 ## v0.1.0
 
 ### Code Changes
