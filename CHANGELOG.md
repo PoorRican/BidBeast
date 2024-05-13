@@ -5,7 +5,7 @@
 ### Code Changes
 
 - Remove code for automatic evaluation and filtering of jobs:
-  * Remove `ReviewCog`
+  * Remove `ReviewCog`, and `StoreJobFunctor`
 
 ---
 
