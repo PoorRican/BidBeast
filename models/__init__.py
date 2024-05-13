@@ -1,1 +1,1 @@
-from job import Job, HourlyRange
+from .job import Job, HourlyRange
