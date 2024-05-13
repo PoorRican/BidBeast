@@ -21,7 +21,7 @@ def _extract_job(entry: dict) -> Job:
     summary = markdownify(entry['summary_detail']['value'])
     summary = unescape(summary)
 
-    return Job(title, summary, entry['link'])
+    return Job(title=title, link=entry['link'], description=summary)
 
 
 class FeedParser(object):

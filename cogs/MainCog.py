@@ -78,14 +78,6 @@ class MainCog(BaseAuthenticatedCog):
     async def feed_status(self, ctx):
         await self.job_feed.status(ctx)
 
-    @feed.command('recent',
-                  aliases=['r'],
-                  help='fetch and list recent jobs from db (in hours)')
-    async def load_recent(self, ctx: commands.Context, hours: Optional[int] = 12):
-        await ctx.send(f"Loading viable jobs from the last {hours} hours")
-        self.job_feed.load_recent(hours)
-        await self.job_feed.list_cache()
-
     @feed.command('list',
                   aliases=['l'],
                   help='list all relevant jobs stored in cache')

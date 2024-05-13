@@ -7,6 +7,7 @@
 - Remove code for automatic evaluation and filtering of jobs:
   * Remove `ReviewCog`, `StoreJobFunctor`, and unused functors
   * Remove `utils` module, old notebooks, and `helpers` module
+- Implement Pydantic for `Job`
 
 ---
 
