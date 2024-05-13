@@ -4,9 +4,8 @@ import discord
 from discord.ext import tasks
 from discord.ext.commands import Cog
 
-from functors.SearchManager import SearchManager
+from handlers import SearchManager
 from models import Job
-from utils import extract_and_handle_jobs
 
 
 class JobFeedCog(Cog):
@@ -29,8 +28,7 @@ class JobFeedCog(Cog):
         except AssertionError:
             raise ValueError("`JobFeedCog` was not properly instantiated. `searches` is `None`")
 
-        raw_feed = self.searches()
-        handled = extract_and_handle_jobs(raw_feed)
+        handled = self.searches()
 
         if handled:
             self.cache.extend(handled)

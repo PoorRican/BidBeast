@@ -1,18 +1,18 @@
-from typing import Iterator
-
 import feedparser
 from discord import User
 
 from db import SUPABASE
 from helpers import retry_on_error
+from models import Job
+from utils import extract_and_handle_jobs
 
 
 class SearchManager(object):
-    """ This functor should replace SessionCog and manage feed URLs for a given user.
+    """ Manages a users RSS feed searches
 
     Its API exposes methods to add and remove searches to be called by bot commands.
 
-    The `__call__()` method fetches and returns the raw job feed and is an alias for `fetch_feed()`.
+    The primary function of this class is `__call__` which fetches and parses all RSS feeds
     """
     feed_urls: list[str] = []
     user: User
@@ -40,7 +40,7 @@ class SearchManager(object):
         SUPABASE.table('bid_beast_users').upsert({'id': self.user.id}).execute()
 
     def remove_url(self, search: str):
-        """ Remove a url from user's feed urls """
+        """ Remove url from user's feed urls """
         self._get_feed_urls()       # ensure `feed_urls` is updated
         self.feed_urls.remove(search)
         SUPABASE.table('bid_beast_users').update({'searches': self.feed_urls}).eq('id', self.user.id).execute()
@@ -58,11 +58,12 @@ class SearchManager(object):
             .execute()
 
     @retry_on_error()
-    def __call__(self) -> list[dict]:
+    def __call__(self) -> list[Job]:
         """ Fetch and parse all RSS feeds """
         entries: list[dict] = []
         for url in self.feed_urls:
             feed = feedparser.parse(url)
             for entry in feed['entries']:
                 entries.append(entry)
-        return entries
+
+        return extract_and_handle_jobs(entries)
