@@ -23,7 +23,7 @@ def _extract_job(entry: dict) -> Job:
 
 
 @retry_on_error()
-def extract_jobs(entries: list[dict]) -> list[Job]:
+def _extract_jobs(entries: list[dict]) -> list[Job]:
     """ Accept new `Job` objects from the raw RSS feed """
     jobs = [_extract_job(i) for i in entries]
 
@@ -40,3 +40,36 @@ def extract_jobs(entries: list[dict]) -> list[Job]:
             incoming.append(job)
     print(f"Parsed {len(incoming)} jobs...")
     return incoming
+
+
+def _store_job(jobs: list[Job]):
+    """ Store job data in supabase """
+    formatted = []
+    for i in jobs:
+        row = {
+            'id': str(i.id),
+            'title': i.title,
+            'desc': i.description,
+            'link': i.link,
+        }
+        formatted.append(row)
+    SUPABASE.table('potential_jobs').insert(formatted).execute()
+
+
+def _handle_new_jobs(jobs: list[Job]) -> list[Job]:
+    """ Process a given list of new jobs.
+
+    Any processing of jobs should occur here.
+    """
+    if jobs:
+        print(f"Found {len(jobs)} new jobs")
+        _store_job(jobs)
+        return jobs
+    else:
+        print("No new jobs...")
+
+
+def extract_and_handle_jobs(entries: list[dict]) -> list[Job]:
+    """ Extract and handle new jobs from the raw RSS feed """
+    jobs = _extract_jobs(entries)
+    return _handle_new_jobs(jobs)

@@ -1,4 +1,4 @@
-from typing import ClassVar, Union, NoReturn
+from typing import Union, NoReturn
 
 import discord
 from discord.ext import tasks
@@ -6,7 +6,7 @@ from discord.ext.commands import Cog
 
 from functors.SearchManager import SearchManager
 from models import Job
-from utils import extract_jobs, handle_new_jobs
+from utils import extract_and_handle_jobs
 
 
 class JobFeedCog(Cog):
@@ -30,8 +30,7 @@ class JobFeedCog(Cog):
             raise ValueError("`JobFeedCog` was not properly instantiated. `searches` is `None`")
 
         raw_feed = self.searches()
-        new_jobs = extract_jobs(raw_feed)
-        handled = handle_new_jobs(new_jobs)
+        handled = extract_and_handle_jobs(raw_feed)
 
         if handled:
             self.cache.extend(handled)
