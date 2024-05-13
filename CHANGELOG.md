@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.1.1
+
+### Code Changes
+
+- Remove code for automatic evaluation and filtering of jobs:
+  * Remove `ReviewCog`
+
+---
+
 ## v0.1.0
 
 ### Code Changes
