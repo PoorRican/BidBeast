@@ -3,8 +3,8 @@ from discord import User
 
 from db import SUPABASE
 from helpers import retry_on_error
-from models import Job
-from utils import extract_and_handle_jobs
+from models.job import Job
+from utils.feed_parsing import extract_and_handle_jobs
 
 
 class SearchManager(object):
