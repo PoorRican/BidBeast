@@ -5,8 +5,8 @@
 ### Code Changes
 
 - Remove code for automatic evaluation and filtering of jobs:
-  * Remove `ReviewCog`, and `StoreJobFunctor`
-  * Remove `utils` package
+  * Remove `ReviewCog`, `StoreJobFunctor`, and unused functors
+  * Remove `utils` package and old notebooks
 
 ---
 
