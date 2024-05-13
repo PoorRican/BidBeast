@@ -4,14 +4,13 @@ import discord
 from discord.ext import tasks
 from discord.ext.commands import Cog
 
-from functors.FeedParser import FeedParser
 from functors.NewJobsHandler import NewJobsHandler
 from functors.SearchManager import SearchManager
 from models import Job
+from utils import extract_jobs
 
 
 class JobFeedCog(Cog):
-    parser: ClassVar[FeedParser] = FeedParser()
     searches: Union[SearchManager, None]
     handler: ClassVar[NewJobsHandler] = NewJobsHandler()
     user: discord.User
@@ -33,7 +32,7 @@ class JobFeedCog(Cog):
             raise ValueError("`JobFeedCog` was not properly instantiated. `searches` is `None`")
 
         raw_feed = self.searches()
-        new_jobs = self.parser(raw_feed)
+        new_jobs = extract_jobs(raw_feed)
         handled = await self.handler(new_jobs)
 
         if handled:

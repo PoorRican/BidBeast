@@ -8,6 +8,7 @@
   * Remove `ReviewCog`, `StoreJobFunctor`, and unused functors
   * Remove `utils` module, old notebooks, and `helpers` module
 - Implement Pydantic for `Job`
+- Convert `FeedParser` into dedicated function
 
 ---
 
