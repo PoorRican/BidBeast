@@ -4,8 +4,8 @@ import discord
 from discord.ext import tasks
 from discord.ext.commands import Cog
 
-from handlers import SearchManager
-from models import Job
+from handlers.SearchManager import SearchManager
+from models.job import Job
 
 
 class JobFeedCog(Cog):
