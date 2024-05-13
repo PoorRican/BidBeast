@@ -4,15 +4,13 @@ import discord
 from discord.ext import tasks
 from discord.ext.commands import Cog
 
-from functors.NewJobsHandler import NewJobsHandler
 from functors.SearchManager import SearchManager
 from models import Job
-from utils import extract_jobs
+from utils import extract_jobs, handle_new_jobs
 
 
 class JobFeedCog(Cog):
     searches: Union[SearchManager, None]
-    handler: ClassVar[NewJobsHandler] = NewJobsHandler()
     user: discord.User
     cache: list[Job] = []
 
@@ -33,7 +31,7 @@ class JobFeedCog(Cog):
 
         raw_feed = self.searches()
         new_jobs = extract_jobs(raw_feed)
-        handled = await self.handler(new_jobs)
+        handled = handle_new_jobs(new_jobs)
 
         if handled:
             self.cache.extend(handled)
