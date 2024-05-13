@@ -6,7 +6,7 @@
 
 - Remove code for automatic evaluation and filtering of jobs:
   * Remove `ReviewCog`, `StoreJobFunctor`, and unused functors
-  * Remove `utils` package and old notebooks
+  * Remove `utils` module, old notebooks, and `helpers` module
 
 ---
 
